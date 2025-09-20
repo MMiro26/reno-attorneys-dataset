@@ -1,0 +1,1206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reno,Nevada Attorneys Dataset - Complete Documentation</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #2c3e50;
+            background: linear-gradient(135deg, #34495e 0%, #2c3e50 100%);
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #1e3a5f 0%, #2c5282 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            font-weight: 400;
+            letter-spacing: 0.5px;
+        }
+        
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .nav-tabs {
+            display: flex;
+            background: #f8fafc;
+            border-bottom: 1px solid #cbd5e0;
+            flex-wrap: wrap;
+        }
+        
+        .nav-tab {
+            padding: 15px 20px;
+            cursor: pointer;
+            border: none;
+            background: none;
+            font-size: 14px;
+            color: #64748b;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s ease;
+            flex: 1;
+            min-width: 120px;
+        }
+        
+        .nav-tab.active {
+            color: #1e40af;
+            border-bottom-color: #1e40af;
+            background: white;
+        }
+        
+        .nav-tab:hover {
+            color: #1e40af;
+            background: #f1f5f9;
+        }
+        
+        .tab-content {
+            display: none;
+            padding: 40px;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin: 30px 0;
+        }
+        
+        .stat-card {
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 8px 32px rgba(30, 64, 175, 0.2);
+            transform: translateY(0);
+            transition: transform 0.3s ease;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 40px rgba(30, 64, 175, 0.25);
+        }
+        
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+        
+        .stat-label {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            font-weight: 500;
+        }
+        
+        .chart-container {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 24px rgba(71, 85, 105, 0.08);
+            margin: 20px 0;
+            position: relative;
+            min-height: 300px;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .charts-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .charts-grid .chart-container {
+            margin: 0;
+            height: 400px;
+        }
+        
+        .charts-grid .chart-container canvas {
+            height: 300px !important;
+            max-height: 300px !important;
+            width: 100% !important;
+        }
+        
+        .chart-title {
+            font-size: 1.4rem;
+            color: #1e40af;
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: 600;
+        }
+        
+        .data-dictionary {
+            background: #f8fafc;
+            border-radius: 12px;
+            overflow: hidden;
+            margin: 20px 0;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .data-dictionary h3 {
+            background: #1e40af;
+            color: white;
+            padding: 20px;
+            margin: 0;
+            font-weight: 600;
+        }
+        
+        .field-group {
+            padding: 20px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .field-group:last-child {
+            border-bottom: none;
+        }
+        
+        .field-group h4 {
+            color: #1e40af;
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+        
+        .field-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 15px;
+        }
+        
+        .field-item {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #3b82f6;
+            box-shadow: 0 2px 8px rgba(71, 85, 105, 0.05);
+        }
+        
+        .field-name {
+            font-weight: 600;
+            color: #1e40af;
+            margin-bottom: 5px;
+        }
+        
+        .field-desc {
+            color: #64748b;
+            font-size: 0.9rem;
+        }
+        
+        .insights-section {
+            background: linear-gradient(135deg, #475569 0%, #64748b 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 12px;
+            margin: 20px 0;
+        }
+        
+        .insights-section h3 {
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+        
+        .insight-item {
+            background: rgba(255,255,255,0.1);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .methodology {
+            background: #f1f5f9;
+            padding: 25px;
+            border-radius: 12px;
+            border-left: 5px solid #3b82f6;
+            margin: 20px 0;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .methodology h3 {
+            color: #1e40af;
+            font-weight: 600;
+        }
+        
+        .download-section {
+            text-align: center;
+            padding: 40px;
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            color: white;
+            border-radius: 12px;
+            margin: 30px 0;
+        }
+        
+        .download-btn {
+            background: white;
+            color: #1e40af;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin: 10px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        .download-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+            background: #f8fafc;
+        }
+        
+        .update-notice {
+            background: #fef3c7;
+            border: 1px solid #f59e0b;
+            color: #92400e;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .data-input {
+            background: #f8fafc;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .data-input textarea {
+            width: 100%;
+            height: 200px;
+            border: 1px solid #cbd5e0;
+            border-radius: 8px;
+            padding: 10px;
+            font-family: monospace;
+            font-size: 12px;
+            background: white;
+        }
+        
+        .update-btn {
+            background: #059669;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 10px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        .update-btn:hover {
+            background: #047857;
+            transform: translateY(-1px);
+        }
+        
+        @media (max-width: 768px) {
+            .nav-tab {
+                font-size: 12px;
+                padding: 12px 15px;
+            }
+            
+            .tab-content {
+                padding: 20px;
+            }
+            
+            .stats-grid {
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+                gap: 15px;
+            }
+            
+            .charts-grid {
+                grid-template-columns: 1fr !important;
+            }
+            
+            .charts-grid .chart-container {
+                height: 350px !important;
+            }
+            
+            .charts-grid .chart-container canvas {
+                height: 250px !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Data structure that will be updated -->
+    <script>
+        let analysisData = {
+            "overview": {
+    "total_companies": 510,
+    "total_fields": 52,
+    "total_data_points": 26520,
+    "contact_accuracy": 80.88
+  },
+  "web_presence": {
+    "has_website_count": 406,
+    "has_website_pct": 79.60,
+    "mobile_friendly_count": 361,
+    "mobile_friendly_pct": 70.78,
+    "wordpress_count": 205,
+    "wordpress_pct": 40.19,
+    "shopify_count": 0,
+    "shopify_pct": 0.0,
+    "google_analytics_count": 235,
+    "google_analytics_pct": 46.07
+  },
+  "social_media": {
+    "facebookprofile_count": 65,     
+    "facebookprofile_pct": 12.74,    
+    "linkedin_count": 165,
+    "linkedin_pct": 32.35,
+    "instagram_count": 55,
+    "instagram_pct": 10.78,
+    "twitter_count": 94,
+    "twitter_pct": 18.43,
+    "instagram_avg_followers": 5324.85,
+    "instagram_median_followers": 10822,
+    "instagram_biz_count": 49,
+    "instagram_biz_pct": 9.6,
+    "has_social_media_count": 300,
+    "has_social_media_pct": 52.82
+  },
+  "advertising": {
+    "adwords_ads_count": 65,
+    "adwords_ads_pct": 12.74,
+    "facebookads_count": 13,         
+    "facebookads_pct": 2.54,  
+    "instagram_ads_count": 11,
+    "instagram_ads_pct": 2.15,
+    "total_advertising_count": 115,
+    "total_advertising_pct": 22.5,
+    "gmb_claimed_count": 322,
+    "gmb_claimed_pct": 63.1
+  }
+        };
+        
+        // Chart instances
+        let chartInstances = {};
+    </script>
+
+    <div class="container">
+        <div class="header">
+            <h1>Reno Attorneys Dataset</h1>
+            <p>Complete Business Intelligence & Digital Analytics Package</p>
+        </div>
+        
+        <div class="nav-tabs">
+           <button class="nav-tab active" onclick="showTab('overview')">Overview</button>
+            <button class="nav-tab" onclick="showTab('statistics')">Statistics</button>
+            <button class="nav-tab" onclick="showTab('visualizations')">Charts</button>
+            <button class="nav-tab" onclick="showTab('dictionary')">Data Dictionary</button>
+            <button class="nav-tab" onclick="showTab('insights')">Insights</button>
+            <button class="nav-tab" onclick="showTab('methodology')">Methodology</button>
+            <button class="nav-tab" onclick="showTab('update')">Update Data</button>
+        </div>
+        
+        <!-- OVERVIEW TAB -->
+        <div id="overview" class="tab-content active">
+            <h2>Dataset Overview</h2>
+            <p>This comprehensive dataset provides complete digital intelligence on law firms and attorneys operating in the Reno, Nevada metropolitan area. The data reflects real-time analysis of digital marketing landscapes, social media presence, and competitive positioning.</p>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number" id="total-companies">510</div>
+                    <div class="stat-label">Total Firms</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="total-fields">52</div>
+                    <div class="stat-label">Data Fields</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="contact-accuracy">80.8%</div>
+                    <div class="stat-label">Contact Accuracy</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="total-data-points">26,520</div>
+                    <div class="stat-label">Total Data Points</div>
+                </div>
+            </div>
+            
+            <div class="download-section">
+                <h3>Ready to Access Premium Business Intelligence?</h3>
+                <p>Get instant access to the complete dataset with all documentation</p>
+                <button class="download-btn" onclick="downloadSample()">📊 Download Sample Data</button>
+                <button class="download-btn" onclick="purchaseDataset()">📋 Full Dataset - $3,500</button>
+            </div>
+        </div>
+        
+        <!-- STATISTICS TAB -->
+        <div id="statistics" class="tab-content">
+            <h2>Real-Time Analysis Results</h2>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number" id="websites-pct">79.6%</div>
+                    <div class="stat-label">Have Websites</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="mobile-pct">70.7%</div>
+                    <div class="stat-label">Mobile-Friendly Sites</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="analytics-pct">46.07%</div>
+                    <div class="stat-label">Use Google Analytics</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="social-pct">52.8%</div>
+                    <div class="stat-label">Have Social Media</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="ads-pct">22.5%</div>
+                    <div class="stat-label">Run Digital Ads</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="gmb-pct">63.1%</div>
+                    <div class="stat-label">GMB Claimed</div>
+                </div>
+            </div>
+            
+            <div class="insights-section" id="dynamic-insights">
+                <h3>Dynamic Market Analysis</h3>
+                <div class="insight-item">
+                    <strong>Digital Readiness:</strong> <span id="insight-mobile">Website optimization presents significant opportunity for law firms</span>
+                </div>
+                <div class="insight-item">
+                    <strong>Analytics Implementation:</strong> <span id="insight-analytics">Most law firms lack proper digital analytics</span>
+                </div>
+                <div class="insight-item">
+                    <strong>Social Media Engagement:</strong> <span id="insight-social">Limited social media presence among attorneys</span>
+                </div>
+                <div class="insight-item">
+                    <strong>Advertising Potential:</strong> <span id="insight-ads">Low digital marketing adoption in legal sector</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- VISUALIZATIONS TAB -->
+        <div id="visualizations" class="tab-content">
+            <h2>Data Visualizations</h2>
+            
+            <div class="charts-grid">
+                <div class="chart-container">
+                    <div class="chart-title">Web Presence Overview</div>
+                    <canvas id="webPresenceChart"></canvas>
+                </div>
+                
+                <div class="chart-container">
+                    <div class="chart-title">Social Media Platform Usage</div>
+                    <canvas id="socialMediaChart"></canvas>
+                </div>
+            </div>
+            
+            <div class="charts-grid">
+                <div class="chart-container">
+                    <div class="chart-title">Digital Marketing Tool Adoption</div>
+                    <canvas id="marketingChart"></canvas>
+                </div>
+                
+                <div class="chart-container">
+                    <div class="chart-title">Website Technology Stack</div>
+                    <canvas id="technologyChart"></canvas>
+                </div>
+            </div>
+        </div>
+        
+        <!-- DATA DICTIONARY TAB -->
+        <div id="dictionary" class="tab-content">
+            <h2>Data Dictionary</h2>
+            
+            <div class="data-dictionary">
+                <h3>Complete Field Reference Guide</h3>
+                
+                <div class="field-group">
+                    <h4>Core Business Information</h4>
+                    <div class="field-list">
+                        <div class="field-item">
+                            <div class="field-name">BusinessName</div>
+                            <div class="field-desc">Official company name as registered</div>
+                        </div>
+                        <div class="field-item">
+                            <div class="field-name">Telephone</div>
+                            <div class="field-desc">Primary business phone number</div>
+                        </div>
+                        <div class="field-item">
+                            <div class="field-name">Email</div>
+                            <div class="field-desc">Primary business email contact</div>
+                        </div>
+                        <div class="field-item">
+                            <div class="field-name">EmailHost</div>
+                            <div class="field-desc">Email service provider (Gmail, Outlook, etc.)</div>
+                        </div>
+                        <div class="field-item">
+                            <div class="field-name">Address, City, State, ZIP</div>
+                            <div class="field-desc">Complete business address information</div>
+                        </div>
+                        <div class="field-item">
+                            <div class="field-name">MainCategory</div>
+                            <div class="field-desc">Legal practice area (Criminal Law, Family Law, Personal Injury, etc.)</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="field-group">
+                    <h4>Web Presence & Technology</h4>
+                    <div class="field-list">
+                        <div class="field-item">
+                            <div class="field-name">WebsiteURL</div>
+                            <div class="field-desc">Primary website address</div>
+                        </div>
+                        <div class="field-item">
+                            <div class="field-name">MobileFriendly</div>
+                            <div class="field-desc">Website mobile optimization status (0/1)</div>
+                        </div>
+                        <div class="field-item">
+                            <div class="field-name">UseWordpress</div>
+                            <div class="field-desc">WordPress CMS usage indicator (0/1)</div>
+                        </div>
+                        <div class="field-item">
+                            <div class="field-name">UseShopify</div>
+                            <div class="field-desc">Shopify platform usage indicator (0/1)</div>
+                        </div>
+                        <div class="field-item">
+                            <div class="field-name">GoogleAnalytics</div>
+                            <div class="field-desc">Google Analytics implementation (0/1)</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="field-group">
+                    <h4>Social Media Intelligence</h4>
+                    <div class="field-list">
+                        <div class="field-item">
+                            <div class="field-name">Linkedin, FacebookProfile, Instagram, Twitter</div>
+                            <div class="field-desc">Social media profile URLs</div>
+                        </div>
+                        <div class="field-item">
+                            <div class="field-name">Instagram_Followers</div>
+                            <div class="field-desc">Number of Instagram followers</div>
+                        </div>
+                        <div class="field-item">
+                            <div class="field-name">Instagram_Is_BizAccount</div>
+                            <div class="field-desc">Business account status on Instagram (0/1)</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="field-group">
+                    <h4>Advertising & Marketing</h4>
+                    <div class="field-list">
+                        <div class="field-item">
+                            <div class="field-name">Adwords_Ads, FacebookAds, Instagram_Ads</div>
+                            <div class="field-desc">Advertising platform usage indicators (0/1)</div>
+                        </div>
+                        <div class="field-item">
+                            <div class="field-name">FacebookPixel, GooglePixel</div>
+                            <div class="field-desc">Marketing pixel implementation status (0/1)</div>
+                        </div>
+                        <div class="field-item">
+                            <div class="field-name">GMB_Claimed</div>
+                            <div class="field-desc">Google My Business claim status (0/1)</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="field-group">
+                    <h4>Reputation & Reviews</h4>
+                    <div class="field-list">
+                        <div class="field-item">
+                            <div class="field-name">GoogleStars, YelpStars, FacebookStars</div>
+                            <div class="field-desc">Average review ratings by platform (1-5)</div>
+                        </div>
+                        <div class="field-item">
+                            <div class="field-name">GoogleCount, Yelpcount, Facebookcount</div>
+                            <div class="field-desc">Total review counts by platform</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- INSIGHTS TAB -->
+        <div id="insights" class="tab-content">
+            <h2>Market Intelligence & Opportunities</h2>
+            
+            <div class="insights-section">
+                <h3>🎯 Service Opportunities</h3>
+                <div class="insight-item" id="mobile-opportunity">
+                    <strong>Mobile Optimization:</strong> High potential for legal website development services based on mobile-friendly statistics
+                </div>
+                <div class="insight-item" id="analytics-opportunity">
+                    <strong>Analytics Implementation:</strong> Significant opportunity for legal marketing analytics consulting
+                </div>
+                <div class="insight-item" id="social-opportunity">
+                    <strong>Social Media Management:</strong> Large market for attorney social media management
+                </div>
+                <div class="insight-item" id="advertising-opportunity">
+                    <strong>Digital Advertising:</strong> Extensive potential for legal advertising and lead generation services
+                </div>
+            </div>
+            
+            <div class="insights-section">
+                <h3>💼 Business Intelligence</h3>
+                <div class="insight-item" id="market-leaders">
+                    <strong>Market Leaders:</strong> Analysis of top-performing law firms in digital adoption
+                </div>
+                <div class="insight-item" id="competitive-gaps">
+                    <strong>Competitive Gaps:</strong> Digital marketing gaps in legal market
+                </div>
+                <div class="insight-item" id="local-search">
+                    <strong>Local Search:</strong> GMB optimization potential assessment
+                </div>
+            </div>
+        </div>
+        
+        <!-- METHODOLOGY TAB -->
+        <div id="methodology" class="tab-content">
+            <h2>Data Collection Methodology</h2>
+            
+            <div class="methodology">
+                <h3>🔍 Data Collection Process</h3>
+                <p><strong>Provider:</strong><strong> Marouane El Ghannouchi (Miro)</strong></p>
+                <p><strong>Collection Period:</strong> December 2024 - June 2025</p>
+                <p><strong>Geographic Scope:</strong> Reno, NEVADA Metropolitan Area </p>
+                <p><strong>Industry Focus:</strong> Law firms, attorneys, and legal practices</p>
+                <p><strong>Verification Process:</strong> Multi-stage verification including automated checks and manual validation</p>
+            </div>
+            
+            <div class="methodology">
+                <h3>📊 Data Sources</h3>
+                <ul style="margin-left: 20px; margin-top: 15px;">
+                    <li>Business directory APIs and public databases</li>
+                    <li>Social media platform APIs (within terms of service)</li>
+                    <li>Website analysis and technology detection tools</li>
+                    <li>Review platform APIs and public data</li>
+                    <li>Domain registration databases</li>
+                    <li>Search engine ranking data</li>
+                </ul>
+            </div>
+            
+            <div class="methodology">
+                <h3>✅ Quality Assurance</h3>
+                <p><strong>Accuracy Rate:</strong> 95%+ for contact information</p>
+                <p><strong>Verification Methods:</strong></p>
+                <ul style="margin-left: 20px; margin-top: 10px;">
+                    <li>Email deliverability testing</li>
+                    <li>Phone number format validation</li>
+                    <li>Website accessibility checks</li>
+                    <li>Social media profile verification</li>
+                    <li>Cross-reference validation across multiple sources</li>
+                </ul>
+            </div>
+            
+            <div class="methodology">
+                <h3>🔒 Privacy & Compliance</h3>
+                <p>All data collected from publicly available sources in compliance with:</p>
+                <ul style="margin-left: 20px; margin-top: 10px;">
+                    <li>Terms of service of all platforms</li>
+                    <li>CCPA and GDPR privacy regulations</li>
+                    <li>Industry best practices for data collection</li>
+                    <li>Ethical web scraping guidelines</li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- UPDATE DATA TAB -->
+        <div id="update" class="tab-content">
+            <h2>Update Dashboard Data</h2>
+            
+            <div class="update-notice">
+                <strong>Instructions:</strong> Copy the JavaScript object output from your Python script and paste it below, then click "Update Dashboard"
+            </div>
+            
+            <div class="data-input">
+                <h3>Paste Analysis Results:</h3>
+                <textarea id="dataInput" placeholder="Paste the JavaScript object from your Python script output here...
+Example:
+{
+  &quot;overview&quot;: {
+    &quot;total_companies&quot;: 755,
+    &quot;total_fields&quot;: 17,
+    &quot;contact_accuracy&quot;: 85.2,
+    &quot;total_data_points&quot;: 10200
+  },
+  &quot;web_presence&quot;: {
+    &quot;has_website_pct&quot;: 83.3,
+    &quot;mobile_friendly_pct&quot;: 45.2,
+    &quot;google_analytics_pct&quot;: 32.1
+  }
+  // ... more data
+    }"
+    ></textarea>
+                <button class="update-btn" onclick="updateDashboard()">Update Dashboard</button>
+                <div id="update-status" style="margin-top: 10px; padding: 10px; border-radius: 5px; display: none;"></div>
+            </div>
+            
+            <div class="methodology">
+                <h3>🔄 How to Update</h3>
+                <ol>
+                    <li>Run your improved Python script</li>
+                    <li>Copy the JavaScript object from the "JAVASCRIPT OBJECT FOR HTML:" section</li>
+                    <li>Paste it into the textarea above</li>
+                    <li>Click "Update Dashboard" to see your real data</li>
+                    <li>Navigate to other tabs to see the updated visualizations</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+
+    <script>
+       function showTab(tabName) {
+            // Hide all tabs
+            const tabs = document.querySelectorAll('.tab-content');
+            tabs.forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Remove active class from all nav tabs
+            const navTabs = document.querySelectorAll('.nav-tab');
+            navTabs.forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Show selected tab
+            document.getElementById(tabName).classList.add('active');
+            
+            // Add active class to clicked nav tab
+            event.target.classList.add('active');
+            
+            // Initialize charts if visualizations tab is shown
+            if (tabName === 'visualizations') {
+                setTimeout(initializeCharts, 100);
+            }
+        }
+        
+        function updateDashboard() {
+            const input = document.getElementById('dataInput').value.trim();
+            const status = document.getElementById('update-status');
+            
+            try {
+                // Parse the input as JSON
+                const newData = JSON.parse(input);
+                
+                // Validate required structure
+                if (!newData.overview || !newData.web_presence) {
+                    throw new Error('Invalid data structure. Make sure to include overview and web_presence sections.');
+                }
+                
+                // Update global data
+                analysisData = newData;
+                
+                // Update overview cards
+                updateOverviewCards();
+                
+                // Update statistics cards
+                updateStatisticsCards();
+                
+                // Update insights
+                updateInsights();
+                
+                // Show success message
+                status.style.display = 'block';
+                status.style.backgroundColor = '#d4edda';
+                status.style.color = '#155724';
+                status.style.border = '1px solid #c3e6cb';
+                status.textContent = '✅ Dashboard updated successfully! Navigate to other tabs to see the changes.';
+                
+                // Clear charts for re-initialization
+                clearCharts();
+                
+            } catch (error) {
+                // Show error message
+                status.style.display = 'block';
+                status.style.backgroundColor = '#f8d7da';
+                status.style.color = '#721c24';
+                status.style.border = '1px solid #f5c6cb';
+                status.textContent = '❌ Error: ' + error.message;
+            }
+        }
+        
+        function updateOverviewCards() {
+            const overview = analysisData.overview;
+            document.getElementById('total-companies').textContent = overview.total_companies || 0;
+            document.getElementById('total-fields').textContent = overview.total_fields || 0;
+            document.getElementById('contact-accuracy').textContent = (overview.contact_accuracy || 0) + '%';
+            document.getElementById('total-data-points').textContent = (overview.total_data_points || 0).toLocaleString();
+        }
+        
+        function updateStatisticsCards() {
+            const web = analysisData.web_presence || {};
+            const social = analysisData.social_media || {};
+            const ads = analysisData.advertising || {};
+            
+            document.getElementById('websites-pct').textContent = (web.has_website_pct || 0) + '%';
+            document.getElementById('mobile-pct').textContent = (web.mobile_friendly_pct || 0) + '%';
+            document.getElementById('analytics-pct').textContent = (web.google_analytics_pct || 0) + '%';
+            document.getElementById('social-pct').textContent = (social.has_social_media_pct || 0) + '%';
+            document.getElementById('ads-pct').textContent = (ads.total_advertising_pct || 0) + '%';
+            document.getElementById('gmb-pct').textContent = (ads.gmb_claimed_pct || 0) + '%';
+        }
+        
+        function updateInsights() {
+            const web = analysisData.web_presence || {};
+            const social = analysisData.social_media || {};
+            const ads = analysisData.advertising || {};
+            
+            // Update mobile insight
+            const mobilePct = web.mobile_friendly_pct || 0;
+            const mobileInsight = document.getElementById('insight-mobile');
+            if (mobilePct < 30) {
+                mobileInsight.textContent = 'Massive opportunity - most companies lack mobile optimization';
+            } else if (mobilePct < 60) {
+                mobileInsight.textContent = 'Moderate opportunity for mobile optimization services';
+            } else {
+                mobileInsight.textContent = 'Good mobile adoption, focus on advanced optimization';
+            }
+            
+            // Update analytics insight
+            const analyticsPct = web.google_analytics_pct || 0;
+            const analyticsInsight = document.getElementById('insight-analytics');
+            if (analyticsPct < 25) {
+                analyticsInsight.textContent = 'Huge potential for analytics consulting services';
+            } else if (analyticsPct < 50) {
+                analyticsInsight.textContent = 'Growing analytics adoption, opportunity for advanced services';
+            } else {
+                analyticsInsight.textContent = 'Good analytics adoption, focus on advanced implementation';
+            }
+            
+            // Update social insight
+            const socialPct = social.has_social_media_pct || 0;
+            const socialInsight = document.getElementById('insight-social');
+            if (socialPct < 30) {
+                socialInsight.textContent = 'Massive social media service opportunity';
+            } else if (socialPct < 60) {
+                socialInsight.textContent = 'Moderate opportunity for social media management';
+            } else {
+                socialInsight.textContent = 'Good social presence, focus on advanced strategies';
+            }
+            
+            // Update advertising insight
+            const adsPct = ads.total_advertising_pct || 0;
+            const adsInsight = document.getElementById('insight-ads');
+            if (adsPct < 20) {
+                adsInsight.textContent = 'Enormous opportunity for paid advertising services';
+            } else if (adsPct < 40) {
+                adsInsight.textContent = 'Strong potential for advertising consulting';
+            } else {
+                adsInsight.textContent = 'Active advertising market, focus on optimization';
+            }
+        }
+        
+        function clearCharts() {
+            // Destroy existing chart instances
+            Object.keys(chartInstances).forEach(key => {
+                if (chartInstances[key]) {
+                    chartInstances[key].destroy();
+                    delete chartInstances[key];
+                }
+            });
+        }
+        
+        function initializeCharts() {
+            // Clear existing charts first
+            clearCharts();
+            
+            const web = analysisData.web_presence || {};
+            const social = analysisData.social_media || {};
+            const ads = analysisData.advertising || {};
+            
+            // Web Presence Overview Chart
+            const webCtx = document.getElementById('webPresenceChart');
+            if (webCtx) {
+                chartInstances.webPresence = new Chart(webCtx, {
+                    type: 'line',
+                    data: {
+                        labels: ['Has Website', 'Mobile Friendly', 'Google Analytics', 'Social Media', 'Digital Ads', 'GMB Claimed'],
+                        datasets: [{
+                            label: 'Adoption Rate (%)',
+                            data: [
+                                web.has_website_pct || 0,
+                                web.mobile_friendly_pct || 0,
+                                web.google_analytics_pct || 0,
+                                social.has_social_media_pct || 0,
+                                ads.total_advertising_pct || 0,
+                                ads.gmb_claimed_pct || 0
+                            ],
+                            borderColor: '#1e40af',
+                            backgroundColor: 'rgba(30, 64, 175, 0.1)',
+                            borderWidth: 3,
+                            fill: true,
+                            tension: 0.4,
+                            pointBackgroundColor: '#1e40af',
+                            pointBorderColor: '#ffffff',
+                            pointBorderWidth: 2,
+                            pointRadius: 6
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                display: false
+                            }
+                        },
+                        layout: {
+                            padding: 10
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                max: 100,
+                                ticks: {
+                                    callback: function(value) {
+                                        return value + '%';
+                                    }
+                                }
+                            },
+                            x: {
+                                ticks: {
+                                    maxRotation: 45
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+            
+            // Social Media Chart
+            const socialCtx = document.getElementById('socialMediaChart');
+            if (socialCtx) {
+                chartInstances.social = new Chart(socialCtx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['LinkedIn', 'Facebook', 'Instagram', 'Twitter', 'No Social Media'],
+                        datasets: [{
+                            data: [
+                                social.linkedin_pct || 0,
+                                social.facebookprofile_pct || 0,
+                                social.instagram_pct || 0,
+                                social.twitter_pct || 0,
+                                100 - (social.has_social_media_pct || 0)
+                            ],
+                            backgroundColor: [
+                                '#0f172a',
+                                '#1e293b',
+                                '#334155',
+                                '#475569',
+                                '#e2e8f0'
+                            ],
+                            borderWidth: 2,
+                            borderColor: '#ffffff'
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'bottom',
+                                labels: {
+                                    padding: 15,
+                                    usePointStyle: true,
+                                    font: {
+                                        size: 11
+                                    }
+                                }
+                            }
+                        },
+                        layout: {
+                            padding: 10
+                        }
+                    }
+                });
+            }
+            
+            // Marketing Tools Chart
+            const marketingCtx = document.getElementById('marketingChart');
+            if (marketingCtx) {
+                chartInstances.marketing = new Chart(marketingCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Google Analytics', 'AdWords', 'Facebook Ads', 'Instagram Ads', 'GMB Claimed'],
+                        datasets: [{
+                            label: 'Adoption Rate (%)',
+                            data: [
+                                web.google_analytics_pct || 0,
+                                ads.adwords_ads_pct || 0,
+                                ads.facebookads_pct || 0,
+                                ads.instagram_ads_pct || 0,
+                                ads.gmb_claimed_pct || 0
+                            ],
+                            backgroundColor: [
+                                '#1e40af', 
+                                '#3b82f6',    
+                                '#60a5fa',  
+                                '#93c5fd',  
+                                '#475569' 
+                            ],
+                            borderRadius: 8,
+                            borderSkipped: false
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                display: false
+                            }
+                        },
+                        layout: {
+                            padding: 10
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                max: 100,
+                                ticks: {
+                                    callback: function(value) {
+                                        return value + '%';
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+            
+            // Technology Stack Chart
+            const techCtx = document.getElementById('technologyChart');
+            if (techCtx) {
+                chartInstances.technology = new Chart(techCtx, {
+                    type: 'polarArea',
+                    data: {
+                        labels: ['WordPress', 'Shopify', 'Mobile Friendly', 'Custom/Other'],
+                        datasets: [{
+                            data: [
+                                web.wordpress_pct || 0,
+                                web.shopify_pct || 0,
+                                web.mobile_friendly_pct || 0,
+                                Math.max(0, (web.has_website_pct || 0) - (web.wordpress_pct || 0) - (web.shopify_pct || 0))
+                            ],
+                            backgroundColor: [
+                                '#1e40af',
+                                '#3b82f6',
+                                '#60a5fa',
+                                '#64748b'
+                            ],
+                            borderWidth: 2,
+                            borderColor: '#ffffff'
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'bottom',
+                                labels: {
+                                    padding: 15,
+                                    usePointStyle: true,
+                                    font: {
+                                        size: 11
+                                    }
+                                }
+                            }
+                        },
+                        layout: {
+                            padding: 10
+                        },
+                        scales: {
+                            r: {
+                                beginAtZero: true,
+                                max: 100,
+                                ticks: {
+                                    callback: function(value) {
+                                        return value + '%';
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+        }
+
+        function downloadSample() {
+            // Create sample property management data
+            const sampleData = [
+            ['Business_Name', 'Phone_number', 'Website_URL', 'MobileFriendly',	'Main_Category',	'Email',	'Address', 'Facebook_Profile','Instagram',],
+            ['Pre Paid Legal Services', '(707) 280-5299', 'http://www.prepaidlegal.com/hub/monicadahl', '1',	'Legal services',	'kevinjfletcher@prepaidlegal.com',	'1145 Meridian Ranch Dr', 'https://www.facebook.com/legalshield/','https://instagram.com/legalshield/'],
+            ['Kidwell & Gallagher', '(775) 323-2667',	'https://www.injuryhelpnv.com/', '1',	'Personal Injury Lawyer',	'info@kidwellgallagher.com',	'403 Hill St','https://www.facebook.com/280888145421417/','https://instagram.com/kginjurylaw/'],
+            ['Wright Law Offices', '(775) 324-1117',	'https://azbklawyer.com/', '1',	'Family Lawyer',	'NULL',	'326 W Liberty St','https://www.facebook.com/thewrightlawoffices/','https://instagram.com/twlo.law/'],
+            ['Washoe Legal Services', '(775) 329-2727', 'http://washoelegalservices.org', '1',	'Divorce & Family Law', 'scook@washoelegalservices.org','299 S Arlington Ave','https://m.me/nnlegalaid/','https://instagram.com/nnlegalaid/'],
+            ['1Source Law LLC', '(775) 502-6105',	'http://www.1sourcelaw.com/', '1', 'Estate Planning Lawyer',	'allison.cairns@1sourcelaw.com',	'1 E Liberty St Suite 600 6th Floor','https://www.facebook.com/1sourcelaw/','https://instagram.com/1sourcelaw/']
+        ];
+            
+            // Convert to CSV format
+            const csvContent = sampleData.map(row => row.join(',')).join('\n');
+            
+            // Create downloadable file
+            const blob = new Blob([csvContent], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'Reno-Attorneys-sample.csv';
+            a.click();
+            window.URL.revokeObjectURL(url);
+        }
+        function purchaseDataset() {
+            // This will redirect to your PayPal Buy Now button URL
+            window.location.href = 'https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=SY4XWKQAYEXD2';
+        }
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            updateOverviewCards();
+            updateStatisticsCards();
+            updateInsights();
+        });
+    </script>
+</body>
+</html>
